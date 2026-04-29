@@ -1,14 +1,14 @@
 package com.tiply.domain.usecase.payment
 
-import com.tiply.data.payment.DefaultPaymentExtraJsonBuilder
-import com.tiply.data.payment.PaymentRouter
+import com.tiply.domain.payment.PaymentApiRouter
+import com.tiply.domain.payment.PaymentExtraJsonBuilder
 import com.tiply.domain.model.*
 import com.tiply.domain.repository.TransactionRepository
 import com.tiply.domain.result.PaymentRequest
 import com.tiply.domain.result.PaymentResult
 import kotlinx.coroutines.flow.Flow
 
-class StartPaymentUseCase(private val paymentRouter: PaymentRouter, private val txRepo: TransactionRepository, private val jsonBuilder: DefaultPaymentExtraJsonBuilder) {
+class StartPaymentUseCase(private val paymentRouter: PaymentApiRouter, private val txRepo: TransactionRepository, private val jsonBuilder: PaymentExtraJsonBuilder) {
  suspend operator fun invoke(waiter: Waiter, cardHash: String?, bill: Long, tip: Long, settings: AppSettings): Result<Long> {
   if (cardHash.isNullOrBlank()) return Result.failure(IllegalArgumentException("card required"))
   if (settings.selectedPaymentIntegrationMode == PaymentIntegrationMode.AAR && settings.terminalId.isBlank()) return Result.failure(IllegalArgumentException("terminal required"))
