@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <application android:name=".TiplyApp" android:allowBackup="false" android:label="@string/app_name" android:theme="@style/Theme.Material3.DayNight.NoActionBar">
+    <application android:name=".TiplyApp" android:allowBackup="false" android:dataExtractionRules="@xml/data_extraction_rules" android:label="@string/app_name" android:theme="@style/Theme.Tiply">
         <activity android:name=".MainActivity" android:screenOrientation="landscape" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
