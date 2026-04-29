@@ -1,6 +1,6 @@
 package com.tiply.data.payment
 
-import com.tiply.domain.result.*
+import com.tiply.domain.payment.*
 import kotlinx.coroutines.delay
 
 class MockCardReaderApi: CardReaderApi { override suspend fun readWaiterCard(): CardReadResult { delay(200); return CardReadResult.Success("mock_pan_sha256") } }

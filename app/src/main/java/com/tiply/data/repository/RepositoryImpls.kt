@@ -1,9 +1,9 @@
 package com.tiply.data.repository
 
-import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.tiply.data.local.dao.*
 import com.tiply.data.local.entity.*
 import com.tiply.domain.model.*
@@ -12,8 +12,6 @@ import com.tiply.domain.security.FieldEncryptor
 import com.tiply.domain.security.PinHasher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-
-private val Context.settingsStore by preferencesDataStore("tiply_settings")
 
 class WaiterRepositoryImpl(private val dao: WaiterDao, private val pinHasher: PinHasher, private val encryptor: FieldEncryptor): WaiterRepository {
  override fun observeWaiters(): Flow<List<Waiter>> = dao.observeAll().map { it.filter { e -> !e.isDeleted }.map { e -> Waiter(e.id,e.firstName,e.lastName,e.cardBindingHashEncrypted!=null,e.cardBindingCreatedAt,e.createdAt,e.updatedAt) } }
@@ -29,11 +27,11 @@ class TransactionRepositoryImpl(private val dao: TransactionDao): TransactionRep
  override suspend fun get(id: Long): Transaction? = dao.getById(id)?.let { Transaction(it.id,it.waiterId,it.terminalId,it.externalTransactionId,it.billAmountMinor,it.tipAmountMinor,it.totalAmountMinor,CurrencyCode.valueOf(it.currency),TransactionStatus.valueOf(it.status),PaymentIntegrationMode.valueOf(it.paymentMethod),it.paymentErrorCode,it.paymentErrorMessage,it.createdAt) }
  override fun observeByWaiter(waiterId: Long): Flow<List<Transaction>> = dao.observeByWaiter(waiterId).map { it.map { e -> Transaction(e.id,e.waiterId,e.terminalId,e.externalTransactionId,e.billAmountMinor,e.tipAmountMinor,e.totalAmountMinor,CurrencyCode.valueOf(e.currency),TransactionStatus.valueOf(e.status),PaymentIntegrationMode.valueOf(e.paymentMethod),e.paymentErrorCode,e.paymentErrorMessage,e.createdAt) } }
 }
-class SettingsRepositoryImpl(private val context: Context): SettingsRepository {
+class SettingsRepositoryImpl(private val dataStore: DataStore<Preferences>): SettingsRepository {
  private val lang = stringPreferencesKey("lang"); private val cur = stringPreferencesKey("cur"); private val mode = stringPreferencesKey("mode"); private val terminal = stringPreferencesKey("terminal")
- override fun observe(): Flow<AppSettings> = context.settingsStore.data.map { AppSettings(selectedLanguage = AppLanguage.valueOf(it[lang] ?: AppLanguage.RU.name), selectedCurrency = CurrencyCode.valueOf(it[cur] ?: CurrencyCode.RUB.name), selectedPaymentIntegrationMode = PaymentIntegrationMode.valueOf(it[mode] ?: PaymentIntegrationMode.MOCK.name), terminalId = it[terminal] ?: "") }
- override suspend fun updateLanguage(language: AppLanguage) { context.settingsStore.edit { it[lang]=language.name } }
- override suspend fun updateCurrency(currency: CurrencyCode) { context.settingsStore.edit { it[cur]=currency.name } }
- override suspend fun updateMode(modeV: PaymentIntegrationMode) { context.settingsStore.edit { it[mode]=modeV.name } }
- override suspend fun updateTerminalId(terminalId: String) { context.settingsStore.edit { it[terminal]=terminalId } }
+ override fun observe(): Flow<AppSettings> = dataStore.data.map { AppSettings(selectedLanguage = AppLanguage.valueOf(it[lang] ?: AppLanguage.RU.name), selectedCurrency = CurrencyCode.valueOf(it[cur] ?: CurrencyCode.RUB.name), selectedPaymentIntegrationMode = PaymentIntegrationMode.valueOf(it[mode] ?: PaymentIntegrationMode.MOCK.name), terminalId = it[terminal] ?: "") }
+ override suspend fun updateLanguage(language: AppLanguage) { dataStore.edit { it[lang]=language.name } }
+ override suspend fun updateCurrency(currency: CurrencyCode) { dataStore.edit { it[cur]=currency.name } }
+ override suspend fun updateMode(modeV: PaymentIntegrationMode) { dataStore.edit { it[mode]=modeV.name } }
+ override suspend fun updateTerminalId(terminalId: String) { dataStore.edit { it[terminal]=terminalId } }
 }

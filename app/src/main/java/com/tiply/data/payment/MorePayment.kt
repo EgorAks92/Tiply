@@ -2,7 +2,7 @@ package com.tiply.data.payment
 
 import com.tiply.domain.model.PaymentIntegrationMode
 import com.tiply.domain.payment.*
-import com.tiply.domain.result.*
+import com.tiply.domain.payment.*
 import org.json.JSONObject
 
 class AarPaymentSdkFacade: PaymentSdkFacade { override suspend fun pay(params: SdkTransactionParams)=SdkTransactionResult(false,errorCode="TODO",errorMessage="TODO SDK"); override suspend fun readCard()=SdkTransactionResult(false,errorCode="TODO",errorMessage="TODO SDK") }

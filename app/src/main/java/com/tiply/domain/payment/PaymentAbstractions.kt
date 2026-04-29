@@ -1,8 +1,8 @@
 package com.tiply.domain.payment
 
 import com.tiply.domain.model.PaymentIntegrationMode
-import com.tiply.domain.result.CardReaderApi
-import com.tiply.domain.result.PaymentApi
+import com.tiply.domain.payment.CardReaderApi
+import com.tiply.domain.payment.PaymentApi
 
 interface PaymentApiRouter { fun route(mode: PaymentIntegrationMode): PaymentApi }
 interface CardReaderApiRouter { fun route(mode: PaymentIntegrationMode): CardReaderApi }
