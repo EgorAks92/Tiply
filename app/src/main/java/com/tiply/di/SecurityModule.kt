@@ -1,7 +1,6 @@
 package com.tiply.di
 
 import com.tiply.data.security.AndroidKeystoreFieldEncryptor
-import com.tiply.data.security.NoOpFieldEncryptor
 import com.tiply.data.security.Pbkdf2PinHasher
 import com.tiply.domain.security.FieldEncryptor
 import com.tiply.domain.security.PinHasher
@@ -15,5 +14,4 @@ import javax.inject.Singleton
 object SecurityModule {
  @Provides fun providePinHasher(): PinHasher = Pbkdf2PinHasher()
  @Provides @Singleton fun provideFieldEncryptor(): FieldEncryptor = AndroidKeystoreFieldEncryptor()
- @Provides fun provideNoOpFieldEncryptorForDebugOnly(): NoOpFieldEncryptor = NoOpFieldEncryptor()
 }

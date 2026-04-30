@@ -4,7 +4,7 @@ import com.tiply.data.payment.DefaultPaymentExtraJsonBuilder
 import com.tiply.data.payment.PaymentRouter
 import com.tiply.domain.model.*
 import com.tiply.domain.repository.TransactionRepository
-import com.tiply.domain.result.*
+import com.tiply.domain.payment.*
 import com.tiply.domain.usecase.payment.StartPaymentUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
