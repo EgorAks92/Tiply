@@ -1,21 +1,11 @@
 package com.tiply.presentation.screen
-
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.tiply.R
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.tiply.presentation.components.*
-
-@Composable
-fun PaymentResultScreen() {
- GlassScaffold {
-  Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-   GlassCard { Text(stringResource(R.string.app_name)); Text(stringResource(R.string.summary)) }
-   EmptyState(stringResource(R.string.payment_in_progress))
-   PrimaryGlassButton(text = stringResource(R.string.retry), onClick = {})
-  }
- }
-}
+import com.tiply.presentation.vm.PaymentResultViewModel
+@Composable fun PaymentResultScreen(nav: NavController, transactionId: Long, vm: PaymentResultViewModel = hiltViewModel()){ val tx by vm.tx.collectAsStateWithLifecycle(); LaunchedEffect(transactionId){vm.load(transactionId)}; GlassScaffold{ Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement=Arrangement.spacedBy(8.dp)){ GlassCard{ androidx.compose.material3.Text("${tx?.status}"); androidx.compose.material3.Text("${tx?.totalAmountMinor}"); androidx.compose.material3.Text("${tx?.paymentErrorMessage ?: ""}") } } } }

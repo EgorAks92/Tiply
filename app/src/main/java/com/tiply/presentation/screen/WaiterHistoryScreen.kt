@@ -1,21 +1,13 @@
 package com.tiply.presentation.screen
-
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.tiply.R
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.tiply.presentation.components.*
-
-@Composable
-fun WaiterHistoryScreen() {
- GlassScaffold {
-  Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-   GlassCard { Text(stringResource(R.string.app_name)); Text(stringResource(R.string.summary)) }
-   EmptyState(stringResource(R.string.payment_in_progress))
-   PrimaryGlassButton(text = stringResource(R.string.retry), onClick = {})
-  }
- }
-}
+import com.tiply.presentation.vm.WaiterHistoryViewModel
+@Composable fun WaiterHistoryScreen(nav: NavController, waiterId: Long, vm: WaiterHistoryViewModel = hiltViewModel()){ val itemsList by vm.list.collectAsStateWithLifecycle(); LaunchedEffect(waiterId){vm.load(waiterId)}; GlassScaffold{ LazyColumn(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)){ items(itemsList){ t -> TransactionCard("${t.status}", "${t.totalAmountMinor}") } } } }

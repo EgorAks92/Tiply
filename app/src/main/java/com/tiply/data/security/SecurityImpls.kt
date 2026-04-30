@@ -17,7 +17,7 @@ import javax.crypto.spec.PBEKeySpec
 class Pbkdf2PinHasher: PinHasher {
  override fun generateSalt(): String = ByteArray(16).also { SecureRandom().nextBytes(it) }.let { Base64.getEncoder().encodeToString(it) }
  override fun hash(pin: String, salt: String): String { val spec=PBEKeySpec(pin.toCharArray(), Base64.getDecoder().decode(salt), 100_000, 256); return Base64.getEncoder().encodeToString(SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(spec).encoded) }
- override fun verify(pin: String, salt: String, hash: String): Boolean = MessageDigest.isEqual(Base64.getDecoder().decode(hash(pin, salt)), Base64.getDecoder().decode(hash))
+ override fun verify(pin: String, salt: String, expectedHash: String): Boolean = MessageDigest.isEqual(Base64.getDecoder().decode(this.hash(pin, salt)), Base64.getDecoder().decode(expectedHash))
 }
 
 class AndroidKeystoreFieldEncryptor: FieldEncryptor {
