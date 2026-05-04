@@ -1,4 +1,4 @@
-package com.tiply.domain.result
+package com.tiply.domain.payment
 
 import com.tiply.domain.model.CurrencyCode
 
